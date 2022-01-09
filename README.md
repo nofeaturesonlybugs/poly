@@ -16,7 +16,7 @@ func CreateUser(r CreateUserRequest) (User, error) {
 ```
 As far as I'm aware **none** of the existing Go packages and libraries allow you to write your handlers so succinctly.  Your existing choices are:  
 1.  use net/http and deal with the boilerplate of unmarshaling *http.Request or
-2.  learning a whole new<sup> and stdlib-incompatible</sup> API usually with new `Request` or `RequestContext` types.
+2.  learning a whole new<sup> and stdlib-incompatible</sup> API with new `Request` or `RequestContext` types.
 
 Poly **is** net/http compatible.  When you apply Poly to one of your handlers it returns http.Handler.  So even though your handlers themselves may not be standard http.Handler signatures you can still use them anywhere else http.Handler is expected.  You can use all of the existing muxes, routers, and middlewares that expect http.Handler *while* writing handlers that only represent their concerns as explained above.
 
@@ -37,7 +37,7 @@ II. Consider Poly for simple or typical handler behavior.
   > Poly is intended to handle simple or typical requests.  Poly does not aim to replace the need for http.Handler altogether.  If you can represent and implement your handler ergonomically with Poly then by all means do so.  But if you need complicated behavior out of either http.ResponseWriter or *http.Request then consider using a standard http.Handler.  If you become bogged down with the unmarshaling behavior for a specific request with Poly then consider making it a standard http.Handler.
 
 III. Prototyping or More Rapid Production  
-  > Since Poly allows your handlers to take on the most succinct signatures possible you may be able to prototype a project or application more quickly than with net/http or other Go libraries.  As your project or site volume grows you can continue to use Poly or change high traffic or high volume endpoints to http.Handler while continuing to use Poly for low (maybe even medium) volume endpoints.
+  > Since Poly allows your handlers to take on the most succinct signatures possible you may be able to prototype a project or application more quickly than with net/http or other Go libraries.  As your project or site volume grows you can continue to use Poly by changing high traffic or high volume endpoints to standard http.Handler while continuing to use Poly for low (maybe even medium) volume endpoints.
 
 
 ## How Poly
