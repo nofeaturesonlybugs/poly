@@ -1,11 +1,11 @@
 `poly` turns any function into `http.Handler`
 
 ## Why Poly
-`Poly` is my attempt at addressing some of the common grievances when working with standard library's `net/http`, which is all the fluff and boilerplate required when unmarshaling data from `*http.Request` and writing to `http.ResponseWriter`.
+Poly is my attempt at addressing some of the common grievances when working with standard library's `net/http`, which is all the fluff and boilerplate required when unmarshaling data from `*http.Request` and writing to `http.ResponseWriter`.
 
-There's certainly no shortage of existing packages that are supposed to make these tasks easier so what's so special about `Poly`?
+There's certainly no shortage of existing packages that are supposed to make these tasks easier so what's so special about Poly?
 
-With `Poly` you can write HTTP handlers that represent their concerns.  Your handler arguments and their return value(s) determine how `Poly` behaves.  The following is easier to write, easier to digest, and easier to test:
+With Poly you can write HTTP handlers that represent their concerns.  Your handler arguments and their return value(s) determine how Poly behaves.  The following is easier to write, easier to digest, and easier to test:
 ```go
 type CreateUserRequest struct {
     Username string `form:"username"`
@@ -18,9 +18,9 @@ As far as I'm aware **none** of the existing Go packages and libraries allow you
 1.  use `net/http` and deal with the boilerplate of unmarshaling `*http.Request` or
 2.  learning a whole new<sup> and stdlib-incompatible</sup> API usually with new `Request` or `RequestContext` types.
 
-`Poly` **is** `net/http` compatible.  When you apply `Poly` to one of your handlers it returns `http.Handler`.  So even though your handlers themselves may not be standard `http.Handler` signatures you can still use them anywhere else `http.Handler` is expected.  You can use all of the existing muxes, routers, and middlewares that expect `http.Handler` *while* writing handlers that only represent their concerns as explained above.
+Poly **is** `net/http` compatible.  When you apply Poly to one of your handlers it returns `http.Handler`.  So even though your handlers themselves may not be standard `http.Handler` signatures you can still use them anywhere else `http.Handler` is expected.  You can use all of the existing muxes, routers, and middlewares that expect `http.Handler` *while* writing handlers that only represent their concerns as explained above.
 
-`Poly` retains your access to `http.ResponseWriter` and `*http.Request` if you still need them.  Any of the following handler signatures will be given the aforementioned arguments:
+Poly retains your access to `http.ResponseWriter` and `*http.Request` if you still need them.  Any of the following handler signatures will be given the aforementioned arguments:
 ```go
 func NeedsWriter(w http.ResponseWriter, ...) {} // Handler called with ResponseWriter
 func NeedsRequest(req *http.Request, ...) {} // Handler called with Request
@@ -28,16 +28,16 @@ func NeedsBoth(w http.ResponseWriter, req *http.Request, ...) {} // Handler call
 ```
 
 ## When Poly  
-I'm a bit biased so I think `Poly` is pretty awesome -- but it's not suitable for all purposes.
+I'm a bit biased so I think Poly is pretty awesome -- but it's not suitable for all purposes.
 
-I. Consider `Poly` for low volume sites or low volume endpoints in a larger site.  
-  > `Poly` needs `reflect` to work its magic and `reflect` isn't free.  There's overhead involved in creating handler arguments, populating them, and invoking your handler via `reflect`.  I would not recommend using `Poly` for high volume or high traffic sites or endpoints.  
+I. Consider Poly for low volume sites or low volume endpoints in a larger site.  
+  > Poly needs `reflect` to work its magic and `reflect` isn't free.  There's overhead involved in creating handler arguments, populating them, and invoking your handler via `reflect`.  I would not recommend using Poly for high volume or high traffic sites or endpoints.  
 
-II. Consider `Poly` for simple or typical handler behavior.  
-  > `Poly` is intended to handle simple or typical requests.  `Poly` does not aim to replace the need for `http.Handler` altogether.  If you can represent and implement your handler ergonomically with `Poly` then by all means do so.  But if you need complicated behavior out of either `http.ResponseWriter` or `*http.Request` then consider using a standard `http.Handler`.  If you become bogged down with the unmarshaling behavior for a specific request with `Poly` then consider making it a standard `http.Handler.`
+II. Consider Poly for simple or typical handler behavior.  
+  > Poly is intended to handle simple or typical requests.  Poly does not aim to replace the need for `http.Handler` altogether.  If you can represent and implement your handler ergonomically with Poly then by all means do so.  But if you need complicated behavior out of either `http.ResponseWriter` or `*http.Request` then consider using a standard `http.Handler`.  If you become bogged down with the unmarshaling behavior for a specific request with Poly then consider making it a standard `http.Handler.`
 
 III. Prototyping or More Rapid Production  
-  > Since `Poly` allows your handlers to take on the most succinct signatures possible you may be able to prototype a project or application more quickly than with `net/http` or other Go libraries.  As your project or site volume grows you can continue to use `Poly` or change high traffic or high volume endpoints to `http.Handler` while continuing to use `Poly` for low (maybe even medium) volume endpoints.
+  > Since Poly allows your handlers to take on the most succinct signatures possible you may be able to prototype a project or application more quickly than with `net/http` or other Go libraries.  As your project or site volume grows you can continue to use Poly or change high traffic or high volume endpoints to `http.Handler` while continuing to use Poly for low (maybe even medium) volume endpoints.
 
 
 ## How Poly
@@ -48,7 +48,7 @@ Within the code examples:
 + `mux` is taken to be an instance of `http.ServeMux`
 + `T` is taken to be a `type T struct{...}` of sufficient complexity.
 
-### Create A `Poly` Instance  
+### Create A Poly Instance  
 ```go
 p := poly.Poly{}
 ```
@@ -69,7 +69,7 @@ mux.Handle("/", p.Handler("Hello, World!")) // panics
 ```
 
 ## Getting Data  
-Handlers created by `Poly` can automatically unmarshal `*http.Request` data into your handler arguments.
+Handlers created by Poly can automatically unmarshal `*http.Request` data into your handler arguments.
 ```go
 type CreateUserRequest struct {
     Username string `json:"username"`
@@ -91,9 +91,9 @@ In the above example the call to `p.Handler` inspects the arguments to `CreateUs
 4. Query string unmarshaling  
   i. The query string occurs after the `?` in `/a/b/c?this=is&the=query&string`
 
-A *zero-value* `Poly` can only unmarshal requests containing JSON.
+A *zero-value* Poly can only unmarshal requests containing JSON.
 
-You must set the `FormMapper` and `QueryMapper` fields in `Poly` to enable form and query string unmarshaling respectively:
+You must set the `FormMapper` and `QueryMapper` fields in Poly to enable form and query string unmarshaling respectively:
 ```go
 p := poly.Poly{
     FormMapper:  poly.DefaultFormMapper,
@@ -110,7 +110,7 @@ type CancelOrderRequest struct {
 }
 ```
 
-To enable unmarshaling of path parameters you must set both the `PathMapper` and `PathParamer` fields in `Poly`:
+To enable unmarshaling of path parameters you must set both the `PathMapper` and `PathParamer` fields in Poly:
 ```go
 // A stub for some fancy router or mux library supporting path parameters.
 rtr := routerlib.Router{}
@@ -128,7 +128,7 @@ rtr.Handle( "/view-student/:student", p.Handler(ViewStudent))
 ```
 
 ## Returning Data  
-`Poly` handlers make it easy to write responses to the client by simply returning it from your function.
+Poly handlers make it easy to write responses to the client by simply returning it from your function.
 
 ### `text/plain`  
 If your handler returns `string` then it is written to the client as `text/plain; charset=utf-8`.
@@ -178,7 +178,7 @@ mux.Handle("create-thing", p.Handler(CreateThingHandler))
 ```
 
 # Performance Tips  
-Try to limit the number of arguments to your handlers.  `Poly` has to create your handler arguments before invoking your handler.  Less arguments means less allocations by `Poly`.
+Try to limit the number of arguments to your handlers.  Poly has to create your handler arguments before invoking your handler.  Less arguments means less allocations by Poly.
 
 Try to limit the number of unmarshal sources.  In general JSON is faster than paths and query strings which are faster than forms.
 ```go
