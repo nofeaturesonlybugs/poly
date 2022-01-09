@@ -1,7 +1,7 @@
-`poly` turns any function into `http.Handler`
+`poly` turns any function into http.Handler
 
 ## Why Poly
-Poly is my attempt at addressing some of the common grievances when working with standard library's `net/http`, which is all the fluff and boilerplate required when unmarshaling data from `*http.Request` and writing to `http.ResponseWriter`.
+Poly is my attempt at addressing some of the common grievances when working with standard library's net/http, which is all the fluff and boilerplate required when unmarshaling data from *http.Request and writing to http.ResponseWriter.
 
 There's certainly no shortage of existing packages that are supposed to make these tasks easier so what's so special about Poly?
 
@@ -15,12 +15,12 @@ func CreateUser(r CreateUserRequest) (User, error) {
 }
 ```
 As far as I'm aware **none** of the existing Go packages and libraries allow you to write your handlers so succinctly.  Your existing choices are:  
-1.  use `net/http` and deal with the boilerplate of unmarshaling `*http.Request` or
+1.  use net/http and deal with the boilerplate of unmarshaling *http.Request or
 2.  learning a whole new<sup> and stdlib-incompatible</sup> API usually with new `Request` or `RequestContext` types.
 
-Poly **is** `net/http` compatible.  When you apply Poly to one of your handlers it returns `http.Handler`.  So even though your handlers themselves may not be standard `http.Handler` signatures you can still use them anywhere else `http.Handler` is expected.  You can use all of the existing muxes, routers, and middlewares that expect `http.Handler` *while* writing handlers that only represent their concerns as explained above.
+Poly **is** net/http compatible.  When you apply Poly to one of your handlers it returns http.Handler.  So even though your handlers themselves may not be standard http.Handler signatures you can still use them anywhere else http.Handler is expected.  You can use all of the existing muxes, routers, and middlewares that expect http.Handler *while* writing handlers that only represent their concerns as explained above.
 
-Poly retains your access to `http.ResponseWriter` and `*http.Request` if you still need them.  Any of the following handler signatures will be given the aforementioned arguments:
+Poly retains your access to http.ResponseWriter and *http.Request if you still need them.  Any of the following handler signatures will be given the aforementioned arguments:
 ```go
 func NeedsWriter(w http.ResponseWriter, ...) {} // Handler called with ResponseWriter
 func NeedsRequest(req *http.Request, ...) {} // Handler called with Request
@@ -31,13 +31,13 @@ func NeedsBoth(w http.ResponseWriter, req *http.Request, ...) {} // Handler call
 I'm a bit biased so I think Poly is pretty awesome -- but it's not suitable for all purposes.
 
 I. Consider Poly for low volume sites or low volume endpoints in a larger site.  
-  > Poly needs `reflect` to work its magic and `reflect` isn't free.  There's overhead involved in creating handler arguments, populating them, and invoking your handler via `reflect`.  I would not recommend using Poly for high volume or high traffic sites or endpoints.  
+  > Poly needs reflect to work its magic and reflect isn't free.  There's overhead involved in creating handler arguments, populating them, and invoking your handler via reflect.  I would not recommend using Poly for high volume or high traffic sites or endpoints.  
 
 II. Consider Poly for simple or typical handler behavior.  
-  > Poly is intended to handle simple or typical requests.  Poly does not aim to replace the need for `http.Handler` altogether.  If you can represent and implement your handler ergonomically with Poly then by all means do so.  But if you need complicated behavior out of either `http.ResponseWriter` or `*http.Request` then consider using a standard `http.Handler`.  If you become bogged down with the unmarshaling behavior for a specific request with Poly then consider making it a standard `http.Handler.`
+  > Poly is intended to handle simple or typical requests.  Poly does not aim to replace the need for http.Handler altogether.  If you can represent and implement your handler ergonomically with Poly then by all means do so.  But if you need complicated behavior out of either http.ResponseWriter or *http.Request then consider using a standard http.Handler.  If you become bogged down with the unmarshaling behavior for a specific request with Poly then consider making it a standard http.Handler.
 
 III. Prototyping or More Rapid Production  
-  > Since Poly allows your handlers to take on the most succinct signatures possible you may be able to prototype a project or application more quickly than with `net/http` or other Go libraries.  As your project or site volume grows you can continue to use Poly or change high traffic or high volume endpoints to `http.Handler` while continuing to use Poly for low (maybe even medium) volume endpoints.
+  > Since Poly allows your handlers to take on the most succinct signatures possible you may be able to prototype a project or application more quickly than with net/http or other Go libraries.  As your project or site volume grows you can continue to use Poly or change high traffic or high volume endpoints to http.Handler while continuing to use Poly for low (maybe even medium) volume endpoints.
 
 
 ## How Poly
@@ -54,7 +54,7 @@ p := poly.Poly{}
 ```
 
 ### `Handler()` Your Functions  
-If you pass a function to `Poly.Handler()` then you get an `http.Handler`.
+If you pass a function to `Poly.Handler()` then you get an http.Handler.
 ```go
 func IndexHandler() {
     fmt.Println("IndexHandler was called!")
@@ -69,7 +69,7 @@ mux.Handle("/", p.Handler("Hello, World!")) // panics
 ```
 
 ## Getting Data  
-Handlers created by Poly can automatically unmarshal `*http.Request` data into your handler arguments.
+Handlers created by Poly can automatically unmarshal *http.Request data into your handler arguments.
 ```go
 type CreateUserRequest struct {
     Username string `json:"username"`
@@ -168,7 +168,7 @@ mux.Handle("/create-thing", p.Handler(CreateThingHandler))
 ```
 
 ### Need More Control?  
-If you need more control over the response then just include `http.ResponseWriter` in the argument list and use it like you normally would.
+If you need more control over the response then just include http.ResponseWriter in the argument list and use it like you normally would.
 ```go
 func CreateThingHandler(w http.ResponseWriter, ...) {
     w.Header().Set("X-FOO", "value")
@@ -209,8 +209,8 @@ type ViewStudentsRequest struct {
 
 # Convenience Notes  
 
-## `http.Handler`, `http.HandlerFunc`, & `func(w, req)`  
-`Poly.Handler()` returns its argument if the argument is already `http.Handler` or `http.HandlerFunc`.
+## http.Handler, `http.HandlerFunc`, & `func(w, req)`  
+`Poly.Handler()` returns its argument if the argument is already http.Handler or `http.HandlerFunc`.
 ```go
 mux.Handle("/404", p.Handler(http.NotFoundHandler()))
 mux.Handle("/redir", p.Handler(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
@@ -225,14 +225,14 @@ mux.Handle("/redir2", p.Handler(func(w http.ResponseWriter, req *http.Request) {
 }))
 ```
 
-In other words `Poly.Handler()` only adds overhead if the argument is incompatible with `http.Handler` and is conveniently shorter than `http.HandlerFunc()`.
+In other words `Poly.Handler()` only adds overhead if the argument is incompatible with http.Handler and is conveniently shorter than `http.HandlerFunc()`.
 
 # Why Does `Poly.Handler()` Panic?  
 `Poly.Handler()` panics instead of returning errors for two reasons.
 
 First and foremost a panic from `Poly.Handler()` means you've passed it a type that is not a function.  This is a programmer mistake and likely to be caught during the development cycle as you're wiring your routes.  Such a panic is unlikely to make it into production and -- in my opinion -- equivalent or on par with a panic caused by a `nil receiver`.
 
-Secondly `Poly.Handler()` returns `http.Handler` *and only* `http.Handler` so that it can be passed seemlessly into other middleware.
+Secondly `Poly.Handler()` returns http.Handler *and only* http.Handler so that it can be passed seemlessly into other middleware.
 ```go
 // Other middlewares
 logging := func(next http.Handler) http.Handler {...}
