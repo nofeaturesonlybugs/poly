@@ -1,7 +1,7 @@
 `poly` turns any function into http.Handler
 
 ## Why Poly
-Poly is my attempt at addressing some of the common grievances when working with standard library's net/http, which is all the fluff and boilerplate required when unmarshaling data from *http.Request and writing to http.ResponseWriter.
+Poly is my attempt at addressing some of the common grievances when working with standard library's net/http -- mostly all the fluff and boilerplate required when unmarshaling data from *http.Request and writing to http.ResponseWriter.
 
 There's certainly no shortage of existing packages that are supposed to make these tasks easier so what's so special about Poly?
 
