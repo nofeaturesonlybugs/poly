@@ -209,8 +209,8 @@ type ViewStudentsRequest struct {
 
 # Convenience Notes  
 
-## http.Handler, `http.HandlerFunc`, & `func(w, req)`  
-`Poly.Handler()` returns its argument if the argument is already http.Handler or `http.HandlerFunc`.
+## http.Handler, http.HandlerFunc, & func(w, req)  
+`Poly.Handler()` returns its argument if the argument is already http.Handler or http.HandlerFunc.
 ```go
 mux.Handle("/404", p.Handler(http.NotFoundHandler()))
 mux.Handle("/redir", p.Handler(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
@@ -218,7 +218,7 @@ mux.Handle("/redir", p.Handler(http.HandlerFunc(func(w http.ResponseWriter, req 
 })))
 ```
 
-If the argument is `func(http.ResponseWriter, *http.Request)` then it is cast to `http.HandlerFunc` and returned.  Note that this means you can replace `http.HandlerFunc(fn)` with `p.Handler(fn)`.
+If the argument is `func(http.ResponseWriter, *http.Request)` then it is cast to http.HandlerFunc and returned.  Note that this means you can replace `http.HandlerFunc(fn)` with `p.Handler(fn)`.
 ```go
 mux.Handle("/redir2", p.Handler(func(w http.ResponseWriter, req *http.Request) {
     http.Redirect(w, req, "/", http.StatusPermanentRedirect)
