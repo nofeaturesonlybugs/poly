@@ -3,6 +3,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/nofeaturesonlybugs/call v0.2.1 h1:1zuxDaJaTvH03MM/F2V+YVRn6xBQmQpjKmidRGkNg1k=
 github.com/nofeaturesonlybugs/call v0.2.1/go.mod h1:Mqu66RV8uuQwH9M+GtPqePWvZuU8qsEpCgqa921xFIk=
+github.com/nofeaturesonlybugs/call v0.2.2 h1:yu7cIGD29L0xwuhvhc1MwmwT+0ctqtMroBfhzI/DqMo=
+github.com/nofeaturesonlybugs/call v0.2.2/go.mod h1:HNiZd4y73snQti7OX9GcoJT8ZczQfh0hzvw+GJ6YboQ=
 github.com/nofeaturesonlybugs/set v0.5.2 h1:jYpcJ80zMN9SeUiCv7DeJBHmnjagfZPd6Cxv7Wamas4=
 github.com/nofeaturesonlybugs/set v0.5.2/go.mod h1:PJIUfp+9nsOTBYANBs4H0wfLz9iYpasx0pGIZRcJCoU=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
