@@ -61,7 +61,7 @@ func newHandler(poly Poly, fn *call.Func) handler {
 		Path:     nil,
 		Query:    nil,
 	}
-	var mapped *set.Mapping
+	var mapped set.Mapping
 	//
 	for k, T := range fn.InTypes {
 		switch true {
@@ -151,7 +151,7 @@ func (h handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	// Unmarshal path parameters.
 	if h.Poly.PathParamer != nil {
 		for _, param := range h.Path {
-			b := h.Poly.PathMapper.Bind(args.Pointers[param.N])
+			b, _ := h.Poly.PathMapper.Bind(args.Pointers[param.N]) // TODO Error reporting
 			for _, param := range param.Keys {
 				b.Set(param, h.Poly.PathParam(req, param))
 			}
@@ -163,7 +163,7 @@ func (h handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if h.Query != nil {
 		params := req.URL.Query()
 		for _, n := range h.Query {
-			b := h.Poly.QueryMapper.Bind(args.Pointers[n])
+			b, _ := h.Poly.QueryMapper.Bind(args.Pointers[n]) // TODO Error reporting
 			for param := range params {
 				b.Set(param, params[param])
 			}
@@ -193,7 +193,7 @@ func (h handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		for _, n := range h.Form {
-			b := h.Poly.FormMapper.Bind(args.Pointers[n])
+			b, _ := h.Poly.FormMapper.Bind(args.Pointers[n]) // TODO Error reporting
 			for name, value := range req.PostForm {
 				b.Set(name, value)
 			}
